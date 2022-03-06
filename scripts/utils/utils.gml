@@ -55,3 +55,52 @@ function array_contains(array, value) {
 
 	return false;
 }
+
+function checkSaveIssues() {
+  checkHorseIndices();
+  checkRaceResultUuids();
+}
+
+function checkHorseIndices() {
+  var len = array_length(oUmaTeamTracker.data.all_horses);
+  for (var i = 0; i < len; i++) {
+    var currentHorse = oUmaTeamTracker.data.all_horses[i];
+
+    
+    var updatedBase = findBaseByName(currentHorse.base.name);
+    
+    currentHorse.base.sprInd = updatedBase.sprInd;
+  }
+}
+
+function getMostRacesWon() {
+  var len = array_length(oUmaTeamTracker.data.all_horses);
+  var resultsSearch = new ResultsSearch();
+  for (var i = 0; i < len; i++) {
+    var currentHorse = oUmaTeamTracker.data.all_horses[i];
+    
+    var racesRun = resultsSearch.reset().filterByHorseObj(currentHorse).length();
+    
+    if (racesRun > oStatsController.most_races_run) {
+      oStatsController.most_races_run = racesRun;
+      show_debug_message(racesRun);
+    }
+  }
+}
+
+function checkRaceResultUuids() {
+  var len = array_length(oUmaTeamTracker.data.results);
+  for (var i = 0; i < len; i++) {
+    var currentResult = oUmaTeamTracker.data.results[i];
+    try {
+      var a = currentResult.uuid;
+    } catch (e) {
+      currentResult.uuid = currentResult.results[0].uuid;
+      var len2 = array_length(currentResult.results);
+      for (var j = 0; j < len2; j++) {
+        var currentSingleResult = currentResult.results[j];
+        variable_struct_remove(currentSingleResult, "uuid");
+      }
+    }
+  }
+}

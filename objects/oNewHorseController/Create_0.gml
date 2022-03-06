@@ -3,7 +3,7 @@ horse_spr_obj = {
   _index: 0
 };
 
-horse_in_progress = createHorseFromBase(_AGNES_TACHYON, 0);
+horse_in_progress = createHorseFromBase(_ADMIRE_VEGA, 0);
 race_type = 0;
 horse_position = 0;
 

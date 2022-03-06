@@ -17,15 +17,51 @@ function ResultsSearch() constructor {
   self.results = oUmaTeamTracker.data.results;
   self.single_results = false;
   self.backup_results = noone;
+  self.backup_single_results = false;
   
   saveBackup = function() {
-    self.backup_results = self.results; 
+    self.backup_results = self.results;
+    self.backup_single_results = self.single_results;
+    
+    return self;
   }
   
   restoreBackup = function() {
     if (self.backup_results != noone) {
       self.results = self.backup_results; 
+      self.single_results = self.backup_single_results;
     }
+    
+    return self;
+  }
+  
+  length = function() {
+    return array_length(results); 
+  }
+  
+  calculateAverage = function(horseUuid) {
+    var numRaces = 0;
+    var finishingPositionTotal = 0;
+    if (single_results) {
+      numRaces = array_length(results);
+      for (var i = 0; i < numRaces; i++) {
+        finishingPositionTotal += results[i].position;
+      }
+    } else {
+      for (var i = 0; i < array_length(results); i++) {
+        var currentResult = results[i].results;
+        
+        for (var j = 0; j < array_length(currentResult); j++) {
+          var currentSingleResult = currentResult[j];
+          numRaces += 1;
+          finishingPositionTotal += currentSingleResult.position;
+        }
+      }
+    }
+    
+    if (numRaces == 0) return 0;
+    
+    return finishingPositionTotal / numRaces;
   }
   
   filterByHorseUuid = function(horseUuid) {
@@ -64,7 +100,10 @@ function ResultsSearch() constructor {
   }
   
   filterByPotentialWin = function(horseUuid) {
-    if (self.single_results) return []; //cannot determine if you only have single race results
+    if (self.single_results) {
+      results = [];
+      return self;
+    } //cannot determine if you only have single race results
     var filteredResults = [];
     
     for (var i = 0; i < array_length(self.results); i++) {
@@ -114,6 +153,37 @@ function ResultsSearch() constructor {
     return filterByFinishingPosition(1);
   }
   
+  filterByRaceType = function(race_type) {
+    var filteredResults = [];
+    
+    if (!self.single_results) {
+      for (var i = 0; i < array_length(self.results); i++) {
+        var currentResultsArray = self.results[i].results;
+        
+        for (var j = 0; j < array_length(currentResultsArray); j++) {
+          var currentSingleResult = currentResultsArray[j];
+          
+          if (currentSingleResult.race_type == race_type) {
+            array_push(filteredResults, currentSingleResult); 
+          }
+        }
+      }
+    } else {
+      for (var i = 0; i < array_length(self.results); i++) {
+        var currentSingleResult = self.results[i];
+          
+        if (currentSingleResult.race_type == race_type) {
+          array_push(filteredResults, currentSingleResult); 
+        }
+      }
+    }
+    
+    
+    self.single_results = true;
+    self.results = filteredResults;
+    return self;
+  }
+  
   filterByHorseObj = function(horseObj) {
     
     var filteredResults = [];
@@ -161,13 +231,13 @@ function ResultsSearch() constructor {
   filterByTeamGeneration = function(team_generations) {
     if (self.single_results) {
       self.results = [];
-      return;
+      return self;
     }
     
     if (!is_array(team_generations)) {
       if (!is_real(team_generations)) {
         self.results = [];
-        return;
+        return self;
       }
       
       team_generations = [team_generations]; 

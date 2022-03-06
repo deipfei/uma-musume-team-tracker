@@ -1,0 +1,82 @@
+Converting GML script: ${project_dir}\scripts\draw_circle_diagram_ext\draw_circle_diagram_ext.gml
+Converted description /// @description  draw_circle_diagram_ext(x, y, r_from, r_to, quality, variable, color, variable, color, ...)/// @param x
+/// @param  y
+/// @param  r_from
+/// @param  r_to
+/// @param  quality
+/// @param  variable
+/// @param  color
+/// @param  variable
+/// @param  color
+/// @param  ...
+
+Converting GML script: ${project_dir}\scripts\draw_circle_diagram\draw_circle_diagram.gml
+Converted description /// @description  draw_circle_diagram(x, y, r_from, r_to, quality, variable, variable, ...)/// @param x
+/// @param  y
+/// @param  r_from
+/// @param  r_to
+/// @param  quality
+/// @param  variable
+/// @param  variable
+/// @param  ...
+
+Converting GML script: ${project_dir}\scripts\draw_circle_diagram_text\draw_circle_diagram_text.gml
+Converted description /// @description  draw_circle_diagram_text(x, y, r_from, r_to, quality, variable, color, variable, color, ...)/// @param x
+/// @param  y
+/// @param  r_from
+/// @param  r_to
+/// @param  quality
+/// @param  variable
+/// @param  color
+/// @param  variable
+/// @param  color
+/// @param  ...
+
+Converting GML script: ${project_dir}\scripts\draw_graph\draw_graph.gml
+Converted description /// @description  draw_graph(x, y, width, height, variable, variable, ...)/// @param x
+/// @param  y
+/// @param  width
+/// @param  height
+/// @param  variable
+/// @param  variable
+/// @param  ...
+
+Converting GML script: ${project_dir}\scripts\draw_graph_grid\draw_graph_grid.gml
+Converted description /// @description  draw_graph_grid(x, y, width, height, variable, variable, ...)/// @param x
+/// @param  y
+/// @param  width
+/// @param  height
+/// @param  variable
+/// @param  variable
+/// @param  ...
+Converted string - line 29: '' -> ""
+
+Converting GML script: ${project_dir}\scripts\draw_graph_grid_text\draw_graph_grid_text.gml
+Converted description /// @description  draw_graph_grid_text(x, y, width, height, variable, variable, ...)/// @param x
+/// @param  y
+/// @param  width
+/// @param  height
+/// @param  variable
+/// @param  variable
+/// @param  ...
+Converted string - line 28: '' -> ""
+
+Converting GML script: ${project_dir}\scripts\draw_graph_text\draw_graph_text.gml
+Converted description /// @description  draw_graph_text(x, y, width, height, variable, variable, ...)/// @param x
+/// @param  y
+/// @param  width
+/// @param  height
+/// @param  variable
+/// @param  variable
+/// @param  ...
+
+Converting GML script: ${project_dir}\scripts\draw_graph_ext\draw_graph_ext.gml
+Converted description /// @description  draw_graph_ext(x, y, width, height, variable, color, variable, color, ...)/// @param x
+/// @param  y
+/// @param  width
+/// @param  height
+/// @param  variable
+/// @param  color
+/// @param  variable
+/// @param  color
+/// @param  ...

@@ -1,7 +1,7 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function resetHorseInProgress(){
-  oNewHorseController.horse_in_progress = createHorseFromBase(_AGNES_TACHYON, 0);
+  oNewHorseController.horse_in_progress = createHorseFromBase(_ADMIRE_VEGA, 0);
 }
 
 function setSRank(horse, index, value) {

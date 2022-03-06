@@ -96,15 +96,61 @@ function HorseStats() constructor {
   self.generation_potential_rate = 0;
 }
 
-function generateStats(horseObj) {
-  var generations = getHorseGenerations(horseObj);
-  oStatsController.resultsSearch.reset().filterByTeamGeneration(generations).saveBackup();
-  //build calculateAverage function on resultsSearch that can optionally take a horse uuid. If it exists, will only average those wins. If not, will average all)
-  show_debug_message(array_length(oStatsController.resultsSearch.results));
-  oStatsController.current_horse_stats.overall_races = array_length(oStatsController.resultsSearch.results);
-  oStatsController.resultsSearch.filterByPotentialWin(horseObj.uuid);
-  show_debug_message(array_length(oStatsController.resultsSearch.results));
+function getHorseStats(i, j) {
+  return oStatsController.current_team_stats[i][j]; 
+}
+
+function generateAllStats(generation) {
+  for (var i = 0; i < 5; i++) {
+    for (var j = 0; j < 3; j++) {
+      var currentHorse = oStatsController.current_team_viewing.horses[i][j];
+      generateStats(currentHorse, generation, i, j);
+    }
+  }
+}
+
+function generateStats(horseObj, generation, i, j) {
   
-  oStatsController.resultsSearch.restoreBackup();
-  show_debug_message(array_length(oStatsController.resultsSearch.results));
+  generateOverallStats(horseObj, i, j);
+  
+  generateGenerationStats(horseObj, generation, i, j);
+}
+
+function generateOverallStats(horseObj, i, j) {
+  var currStats = oStatsController.current_team_stats[i][j];
+  var generations = getHorseGenerations(horseObj);
+  RESULTS.reset().filterByTeamGeneration(generations).saveBackup().filterByHorseObj(horseObj);
+  //build calculateAverage function on resultsSearch that can optionally take a horse uuid. If it exists, will only average those wins. If not, will average all)
+  currStats.overall_races = RESULTS.length();
+  currStats.overall_average = RESULTS.calculateAverage();
+  
+  RESULTS.filterByWin();
+  
+  currStats.overall_wins = RESULTS.length();
+  currStats.overall_win_rate = (currStats.overall_wins / currStats.overall_races) * 100;
+  
+  RESULTS.restoreBackup().filterByPotentialWin(horseObj.uuid);
+  currStats.overall_potential_wins = RESULTS.length();
+  currStats.overall_potential_rate = currStats.overall_win_rate + ((currStats.overall_potential_wins / currStats.overall_races) * 100);
+}
+
+function generateGenerationStats(horseObj, generations, i, j) {
+  if (!is_array(generations)) {
+    generations = [generations]; 
+  }
+  
+  var currStats = oStatsController.current_team_stats[i][j];
+  
+  RESULTS.reset().filterByTeamGeneration(generations).saveBackup().filterByHorseObj(horseObj);
+  currStats.generation_races = RESULTS.length();
+  currStats.generation_average = RESULTS.calculateAverage();
+  
+  RESULTS.filterByWin();
+  
+  currStats.generation_wins = RESULTS.length();
+  currStats.generation_win_rate = (currStats.generation_wins / currStats.generation_races) * 100;
+  
+  RESULTS.restoreBackup().filterByPotentialWin(horseObj.uuid);
+  currStats.generation_potential_wins = RESULTS.length();
+  currStats.generation_potential_rate = currStats.generation_win_rate + ((currStats.generation_potential_wins / currStats.generation_races) * 100);
 }

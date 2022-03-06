@@ -17,4 +17,14 @@ textDirt = noone;
 
 resultsSearch = new ResultsSearch();
 
-current_horse_stats = new HorseStats();
+current_team_stats = [[], [], [], [], []];
+
+most_races_run = 0;
+
+for (var i = 0; i < 5; i++) {
+  for (var j = 0; j < 3; j++) {
+    current_team_stats[i][j] = new HorseStats();
+  }
+}
+
+getMostRacesWon();

@@ -56,7 +56,9 @@ function addGenerationToTeam() {
   for (var i = 0; i < 5; i++) {
     for (var j = 0; j < 3; j++) {
       var currentHorse = oUmaTeamTracker.team_in_memory[i][j];
-      array_push(currentHorse.team_generations, new TeamPositions(oUmaTeamTracker.data.team.generation, i, j));
+      if (currentHorse != noone) {
+        array_push(currentHorse.team_generations, new TeamPositions(oUmaTeamTracker.data.team.generation, i, j));
+      }
     }
   }
 }

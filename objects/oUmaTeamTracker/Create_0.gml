@@ -1,37 +1,55 @@
 randomize();
 
 enum HORSE_INDEX {
+  ADMIRE_VEGA,
+  AGNES_DIGITAL,
   AGNES_TACHYON,
   AIR_GROOVE,
   BIWA_HAYAHIDE,
   CURREN_CHAN,
   DAIWA_SCARLET,
+  EISHIN_FLASH,
   EL_CONDOR_PASA,
+  FINE_MOTION,
   FUJI_KISEKI,
+  GOLD_CITY,
   GOLD_SHIP,
   GRASS_WONDER,
   HARU_URARA,
+  HISHI_AKEBONO,
   HISHI_AMAZON,
+  KAWAKAMI_PRINCESS,
   KING_HALO,
+  KITASAN_BLACK,
+  MANHATTAN_CAFE,
   MARUZENSKY,
   MATIKANE_FUKUKITARU,
+  MATIKANE_TANNHAUSER,
   MAYANO_TOP_GUN,
+  MEISHO_DOTO,
+  MEJIRO_ARDAN,
+  MEJIRO_DOBER,
   MEJIRO_MCQUEEN,
   MEJIRO_RYAN,
   MIHONO_BOURBON,
   NARITA_BRIAN,
+  NARITA_TAISHIN,
   NICE_NATURE,
   OGURI_CAP,
   RICE_SHOWER,
   SAKURA_BAKUSHIN_O,
+  SAKURA_CHIYONO_O,
   SEIUN_SKY,
   SILENCE_SUZUKA,
+  SMART_FALCON,
   SPECIAL_WEEK,
   SUPER_CREEK,
   SYMBOLI_RUDOLF,
   TAIKI_SHUTTLE,
+  TAMAMO_CROSS,
   TM_OPERA_O,
   TOKAI_TEIO,
+  TOSEN_JORDAN,
   VODKA,
   WINNING_TICKET
 }
@@ -52,37 +70,55 @@ enum S_RANK_INDEXES {
 
 #region ALL HORSES
 ALL_HORSES = [
+  new HorseBase("Admire Vega", HORSE_INDEX.ADMIRE_VEGA),
+  new HorseBase("Agnes Digital", HORSE_INDEX.AGNES_DIGITAL),
   new HorseBase("Agnes Tachyon", HORSE_INDEX.AGNES_TACHYON),
   new HorseBase("Air Groove", HORSE_INDEX.AIR_GROOVE),
   new HorseBase("Biwa Hayahide", HORSE_INDEX.BIWA_HAYAHIDE),
   new HorseBase("Curren-chan", HORSE_INDEX.CURREN_CHAN),
   new HorseBase("Daiwa Scarlet", HORSE_INDEX.DAIWA_SCARLET),
+  new HorseBase("Eishin Flash", HORSE_INDEX.EISHIN_FLASH),
   new HorseBase("El Condor Pasa", HORSE_INDEX.EL_CONDOR_PASA),
+  new HorseBase("Fine Motion", HORSE_INDEX.FINE_MOTION),
   new HorseBase("Fuji Kiseki", HORSE_INDEX.FUJI_KISEKI),
+  new HorseBase("Gold City", HORSE_INDEX.GOLD_CITY),
   new HorseBase("Gold Ship", HORSE_INDEX.GOLD_SHIP),
   new HorseBase("Grass Wonder", HORSE_INDEX.GRASS_WONDER),
   new HorseBase("Haru Urara", HORSE_INDEX.HARU_URARA),
+  new HorseBase("Hishi Akebono", HORSE_INDEX.HISHI_AKEBONO),
   new HorseBase("Hishi Amazon", HORSE_INDEX.HISHI_AMAZON),
+  new HorseBase("Kawakami Princess", HORSE_INDEX.KAWAKAMI_PRINCESS),
   new HorseBase("King Halo", HORSE_INDEX.KING_HALO),
+  new HorseBase("Kitasan Black", HORSE_INDEX.KITASAN_BLACK),
+  new HorseBase("Manhattan Cafe", HORSE_INDEX.MANHATTAN_CAFE),
   new HorseBase("Maruzensky", HORSE_INDEX.MARUZENSKY),
   new HorseBase("Matikane Fukukitaru", HORSE_INDEX.MATIKANE_FUKUKITARU),
+  new HorseBase("Matikane Tannhauser", HORSE_INDEX.MATIKANE_TANNHAUSER),
   new HorseBase("Mayano Top Gun", HORSE_INDEX.MAYANO_TOP_GUN),
+  new HorseBase("Meisho Doto", HORSE_INDEX.MEISHO_DOTO),
+  new HorseBase("Mejiro Ardan", HORSE_INDEX.MEJIRO_ARDAN),
+  new HorseBase("Mejiro Dober", HORSE_INDEX.MEJIRO_DOBER),
   new HorseBase("Mejiro McQueen", HORSE_INDEX.MEJIRO_MCQUEEN),
   new HorseBase("Mejiro Ryan", HORSE_INDEX.MEJIRO_RYAN),
   new HorseBase("Mihono Bourbon", HORSE_INDEX.MIHONO_BOURBON),
   new HorseBase("Narita Brian", HORSE_INDEX.NARITA_BRIAN),
+  new HorseBase("Narita Taishin", HORSE_INDEX.NARITA_TAISHIN),
   new HorseBase("Nice Nature", HORSE_INDEX.NICE_NATURE),
   new HorseBase("Oguri Cap", HORSE_INDEX.OGURI_CAP),
   new HorseBase("Rice Shower", HORSE_INDEX.RICE_SHOWER),
   new HorseBase("Sakura Bakushin O", HORSE_INDEX.SAKURA_BAKUSHIN_O),
+  new HorseBase("Sakura Chiyono O", HORSE_INDEX.SAKURA_CHIYONO_O),
   new HorseBase("Seiun Sky", HORSE_INDEX.SEIUN_SKY),
   new HorseBase("Silence Suzuka", HORSE_INDEX.SILENCE_SUZUKA),
+  new HorseBase("Smart Falcon", HORSE_INDEX.SMART_FALCON),
   new HorseBase("Special Week", HORSE_INDEX.SPECIAL_WEEK),
   new HorseBase("Super Creek", HORSE_INDEX.SUPER_CREEK),
   new HorseBase("Symboli Rudolf", HORSE_INDEX.SYMBOLI_RUDOLF),
   new HorseBase("Taiki Shuttle", HORSE_INDEX.TAIKI_SHUTTLE),
+  new HorseBase("Tamamo Cross", HORSE_INDEX.TAMAMO_CROSS),
   new HorseBase("TM Opera O", HORSE_INDEX.TM_OPERA_O),
   new HorseBase("Tokai Teio", HORSE_INDEX.TOKAI_TEIO),
+  new HorseBase("Tosen Jordan", HORSE_INDEX.TOSEN_JORDAN),
   new HorseBase("Vodka", HORSE_INDEX.VODKA),
   new HorseBase("Winning Ticket", HORSE_INDEX.WINNING_TICKET)
 ];
@@ -95,6 +131,10 @@ data = {
 };
 
 load();
+
+if (array_length(data.all_horses) > 0) {
+  checkSaveIssues();
+}
 
 team_in_memory = loadTeamIntoMemory();
 
@@ -334,8 +374,9 @@ for (var i = 0; i < 5; i++) {
         } else {
           #region view mode
           var selectedHorse = getHorse(oUmaTeamTracker.team_in_memory, self.race_type, self.horse_position);
-          var dialog = new EmuDialog(950, 640, selectedHorse.base.name);
-          
+          if (selectedHorse != noone) {
+            var dialog = new EmuDialog(950, 640, selectedHorse.base.name);
+          }
           #endregion
         }
       })
@@ -421,10 +462,12 @@ for (var i = 0; i < 10; i++) {
 var genWidth = 600;
 var genPicker = new EmuInput((room_width / 2) - (genWidth / 2), 32, genWidth, 32, "Current Team Generation: " + string(oUmaTeamTracker.data.team.generation), "", "", 100, E_InputTypes.INT, function() {
   if (value != "") {
-    oStatsController.current_team_generation = real(value);
+    var newGen = real(value);
+    oStatsController.current_team_generation = newGen;
     oStatsController.current_team_viewing = json_parse(json_stringify(loadTeamByGeneration(real(value)))); //get new instance so I can add stats without affecting anything
     setStatsTeam();
-    setOverallAverages(real(value));
+    setOverallAverages(newGen);
+    generateAllStats(newGen);
   }
 });
 
@@ -433,7 +476,12 @@ for (var i = 0; i < 5; i++) {
     var currButton = new EmuButtonImageHorse(140 + (232 * i), 200 + (180 * j), 128, 128, i, j, c_white, 1, true, function () {
       if (self.horse != noone) {
         //show_debug_message(calculateHorseAverage(self.horse.uuid, [32]));
-        generateStats(self.horse);
+        show_debug_message(getHorseStats(self.race_type, self.horse_position));
+        var dialog = new EmuDialog(950, 640, self.horse.base.name);
+        
+        var graph = new EmuResultsGraph(600, 25, 300, 300, self.horse);
+        
+        dialog.AddContent([graph]);
       }
     });
     currButton.horse = oStatsController.current_team_viewing.horses[i][j];
@@ -460,4 +508,7 @@ tab_stats.AddContent([
 
 #region horses
 
+tab_horses.AddContent([
+  new HorseChart(30, 30, 1220, 660, 0, 100, "Win %", 0, oStatsController.most_races_run, "Certainty")
+]);
 #endregion
