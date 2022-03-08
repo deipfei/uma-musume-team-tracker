@@ -1,7 +1,6 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
 function Result(horse_uuid, position, race_type, horse_position) constructor {
-  self.uuid = uuid_generate();
   self.horse_uuid = horse_uuid;
   self.position = position;
   self.race_type = race_type;
@@ -11,6 +10,8 @@ function Result(horse_uuid, position, race_type, horse_position) constructor {
 function Results(results, teamGeneration) constructor {
   self.results = results;
   self.team_generation = teamGeneration;
+  self.uuid = uuid_generate();
+  self.class = 0;
 }
 
 function ResultsSearch() constructor {
@@ -257,6 +258,35 @@ function ResultsSearch() constructor {
     return self;
   }
   
+  filterByClass = function(classes) {
+    if (self.single_results) {
+      self.results = [];
+      return self;
+    }
+    
+    if (!is_array(classes)) {
+      if (!is_real(classes)) {
+        self.results = [];
+        return self;
+      }
+      
+      classes = [classes]; 
+    }
+    
+    var filteredResults = [];
+    
+    for (var i = 0; i < array_length(self.results); i++) {
+      var currentResults = self.results[i];
+      
+      if (array_contains(classes, currentResults.class)) {
+        array_push(filteredResults, currentResults); 
+      }
+    }
+    
+    self.results = filteredResults;
+    return self;
+  }
+  
   reset = function() {
     self.results = oUmaTeamTracker.data.results;
     self.single_results = false;
@@ -293,7 +323,7 @@ function addResults() {
   }
   
   var resultsObj = new Results(results, oUmaTeamTracker.data.team.generation);
-  
+  resultsObj.class = oNewResultController.class;
   array_push(oUmaTeamTracker.data.results, resultsObj);
   
   updatePreviousResults(resultsObj.results, array_length(oUmaTeamTracker.data.results));

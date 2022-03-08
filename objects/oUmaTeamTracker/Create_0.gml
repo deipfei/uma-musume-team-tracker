@@ -145,6 +145,7 @@ instance_create_depth(0, 0, 0, oUmaTeamEditController);
 instance_create_depth(0, 0, 0, oStatsController);
 
 setOverallAverages(-1);
+oNewResultController.class = data.results[array_length(data.results) - 1].class;
 
 container = new EmuCore(0, 0, room_width, room_height);
 
@@ -436,7 +437,15 @@ var newResultsButton = new EmuButton((room_width / 2) - 200, 32, 400, 64, "New R
       dialog.AddContent([cancelButton, submitButton]);
   }
 });
-tab_results.AddContent(newResultsButton);
+var classInput = new EmuInput(900, 48, 150, 32, "Class", string(oNewResultController.class), "", 1, E_InputTypes.STRING, function() {
+  try {
+    var newClass = real(value);
+    oNewResultController.class = newClass;
+  } catch (e) {
+  }
+});
+
+tab_results.AddContent([newResultsButton, classInput]);
 #endregion
 
 #region previous 10 results
@@ -509,6 +518,6 @@ tab_stats.AddContent([
 #region horses
 
 tab_horses.AddContent([
-  new HorseChart(30, 30, 1220, 660, 0, 100, "Win %", 0, oStatsController.most_races_run, "Certainty")
+  new HorseChart(30, 30, 1220, 660, 0, 100, "Win %", 0, oStatsController.most_races_run, "Races Run")
 ]);
 #endregion

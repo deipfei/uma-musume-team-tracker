@@ -59,6 +59,7 @@ function array_contains(array, value) {
 function checkSaveIssues() {
   checkHorseIndices();
   checkRaceResultUuids();
+  save();
 }
 
 function checkHorseIndices() {
@@ -101,6 +102,12 @@ function checkRaceResultUuids() {
         var currentSingleResult = currentResult.results[j];
         variable_struct_remove(currentSingleResult, "uuid");
       }
+    }
+    
+    try {
+      var a = currentResult.class; 
+    } catch (e) {
+      currentResult.class = 0; 
     }
   }
 }

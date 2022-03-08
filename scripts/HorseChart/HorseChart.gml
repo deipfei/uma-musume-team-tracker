@@ -14,27 +14,38 @@ function HorseChart(x, y, w, h, xMin, xMax, xLabel, yMin, yMax, yLabel): EmuCore
   self.data = ds_list_create();
   
   var len = array_length(oUmaTeamTracker.data.all_horses);
+  xAxisMax = 0;
+  yAxisMax = 0;
   for (var i = 0; i < len; i++) {
     var currentHorse = oUmaTeamTracker.data.all_horses[i];
       
     var racesRun = resultsSearch.reset().filterByHorseObj(currentHorse).length();
+    if (racesRun > yAxisMax) {
+      yAxisMax = racesRun; 
+    }
+    //var wins = resultsSearch.reset().filterByPotentialWin(currentHorse.uuid).length(); //potential
     var wins = resultsSearch.filterByWin().length();
     var winP = (wins / racesRun) * 100;
+    
+    if (winP > xAxisMax) {
+      xAxisMax = winP;
+    }
       
-    var xDiff = xAxisMax - xAxisMin;
-    var yDiff = yAxisMax - yAxisMin;
-      
-    var xData = (winP - xAxisMin) / xDiff;
-    var yData = (racesRun - yAxisMin) / yDiff;
+    var xData = (winP - xAxisMin);
+    var yData = (racesRun - yAxisMin);
     
     var dataPoint = {
-      _x: (xData * width),
-      _y: (yData * height),
-      tooltip: currentHorse.base.name + " - " + string(currentHorse.total)
+      _x: xData,
+      _y: yData,
+      tooltip: currentHorse.base.name + " - " + string(currentHorse.total),
+      in_team: teamIncludesHorse(oUmaTeamTracker.data.team, currentHorse)
     };
     
     ds_list_add(data, dataPoint);
   }
+  
+  xAxisMax += 5;
+  yAxisMax += 5;
   
   self.dataLength = ds_list_size(data);
 
@@ -50,6 +61,8 @@ function HorseChart(x, y, w, h, xMin, xMax, xLabel, yMin, yMax, yLabel): EmuCore
     var yAxisY = y2 - 20;
     var oldHalign = draw_get_halign();
     var oldValign = draw_get_valign();
+    var xDiff = xAxisMax - xAxisMin;
+    var yDiff = yAxisMax - yAxisMin;
     
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
@@ -63,15 +76,21 @@ function HorseChart(x, y, w, h, xMin, xMax, xLabel, yMin, yMax, yLabel): EmuCore
     for (var i = 0; i < dataLength; i++) {
       var currentData = data[| i];
       
-      var _x = xAxisX + currentData._x;
-      var _y = yAxisY - currentData._y;
+      var _x = xAxisX + ((currentData._x / xDiff) * width);
+      var _y = yAxisY - ((currentData._y / yDiff) * height);
       
       draw_circle_color(_x, _y, 3, c_blue, c_blue, false);
+      var colToUse = currentData.in_team ? c_red : c_black;
+      
+      if (draw_get_color() != colToUse) {
+        draw_set_color(colToUse); 
+      }
       draw_text(_x + 5, _y, currentData.tooltip);
     }
     
     draw_set_halign(oldHalign);
     draw_set_valign(oldValign);
+    draw_set_color(c_black);
   }
   
   Destroy = function() {

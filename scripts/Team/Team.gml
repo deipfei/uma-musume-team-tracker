@@ -40,6 +40,16 @@ function setHorse(type_ind, horse_ind, horse) {
   }
 }
 
+function teamIncludesHorse(team, horse) {
+  for (var i = 0; i < 5; i++) {
+    for (var j = 0; j < 3; j++) {
+      if (team.horses[i][j] == horse.uuid) return true; 
+    }
+  }
+  
+  return false;
+}
+
 function getHorse(team, type_ind, horse_ind) {
   return team[type_ind][horse_ind]; 
 }
