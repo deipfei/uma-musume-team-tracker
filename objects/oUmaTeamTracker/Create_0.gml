@@ -153,12 +153,12 @@ var tab_group = new EmuTabGroup(0, 0, room_width, room_height, 1, 32);
 var tab_team = new EmuTab("Team");
 var tab_results = new EmuTab("Results");
 var tab_stats = new EmuTab("Stats");
+var tab_chart = new EmuTab("Chart");
 var tab_horses = new EmuTab("Horses");
 
-tab_group.AddTabs(0, [tab_team, tab_results, tab_stats, tab_horses]);
+tab_group.AddTabs(0, [tab_team, tab_results, tab_stats, tab_chart, tab_horses]);
 
 container.AddContent(tab_group);
-
 #region team
 tab_team.AddContent([
   new EmuButton((room_width / 2) - 200, 32, 400, 64, "Edit Team", function() {
@@ -485,12 +485,16 @@ for (var i = 0; i < 5; i++) {
     var currButton = new EmuButtonImageHorse(140 + (232 * i), 200 + (180 * j), 128, 128, i, j, c_white, 1, true, function () {
       if (self.horse != noone) {
         //show_debug_message(calculateHorseAverage(self.horse.uuid, [32]));
-        show_debug_message(getHorseStats(self.race_type, self.horse_position));
+        var stats = getHorseStats(self.race_type, self.horse_position);
         var dialog = new EmuDialog(950, 640, self.horse.base.name);
         
-        var graph = new EmuResultsGraph(600, 25, 300, 300, self.horse);
+        var statsText = new EmuText(16, 16, 240, 300, stats.toString());
         
-        dialog.AddContent([graph]);
+        var winsChart = new EmuResultsGraph(300, 25, 300, 150, self.horse, CHART_TYPE.WIN_PERCENTAGE);
+        var potWinsChart = new EmuResultsGraph(300, 225, 300, 150, self.horse, CHART_TYPE.POTENTIAL_WIN_PERCENTAGE);
+        var topThreesChart = new EmuResultsGraph(300, 425, 300, 150, self.horse, CHART_TYPE.TOP_THREES);
+        
+        dialog.AddContent([statsText, winsChart, potWinsChart, topThreesChart]);
       }
     });
     currButton.horse = oStatsController.current_team_viewing.horses[i][j];
@@ -515,9 +519,9 @@ tab_stats.AddContent([
 ]);
 #endregion
 
-#region horses
+#region chart
 
-tab_horses.AddContent([
+tab_chart.AddContent([
   new HorseChart(30, 30, 1220, 660, 0, 100, "Win %", 0, oStatsController.most_races_run, "Races Run")
 ]);
 #endregion

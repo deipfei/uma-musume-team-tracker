@@ -84,7 +84,6 @@ function getMostRacesWon() {
     
     if (racesRun > oStatsController.most_races_run) {
       oStatsController.most_races_run = racesRun;
-      show_debug_message(racesRun);
     }
   }
 }

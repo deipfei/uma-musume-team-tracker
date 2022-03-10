@@ -43,8 +43,6 @@ function calculateHorseAverage(horseUuid, team_generations) {
   
   if (numRaces == 0) return 0;
   
-  show_debug_message("Races: " + string(numRaces) + ", Total Placement: " + string(totalPlacement));
-  
   return totalPlacement / numRaces;
 }
 
@@ -94,6 +92,22 @@ function HorseStats() constructor {
   self.generation_win_rate = 0;
   self.generation_potential_wins = 0;
   self.generation_potential_rate = 0;
+  
+  toString = function() {
+    return "Overall Races: " + string(overall_races) + "\n" + 
+           "Overall Average: " + string(overall_average) + "\n" + 
+           "Overall Wins: " + string(overall_wins) + "\n" + 
+           "Overall Win %: " + string(overall_win_rate) + "\n" + 
+           "Overall Potential Wins: " + string(overall_potential_wins) + "\n" + 
+           "Overall Potential Win %: " + string(overall_potential_rate) + "\n" + 
+           "\n" + 
+           "Generation Races: " + string(generation_races) + "\n" + 
+           "Generation Average: " + string(generation_average) + "\n" + 
+           "Generation Wins: " + string(generation_wins) + "\n" + 
+           "Generation Win %: " + string(generation_win_rate) + "\n" + 
+           "Generation Potential Wins: " + string(generation_potential_wins) + "\n" + 
+           "Generation Potential Win %: " + string(generation_potential_rate) + "\n";
+  }
 }
 
 function getHorseStats(i, j) {

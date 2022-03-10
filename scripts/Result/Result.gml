@@ -100,7 +100,15 @@ function ResultsSearch() constructor {
     return self;
   }
   
-  filterByPotentialWin = function(horseUuid) {
+  filterByWinAndPotential = function (horseUuid) {
+     return filterByPotentialMaybeWin(horseUuid, true);
+  }
+  
+  filterByPotentialWin = function (horseUuid) {
+    return filterByPotentialMaybeWin(horseUuid, false);
+  }
+  
+  filterByPotentialMaybeWin = function(horseUuid, includeWin) {
     if (self.single_results) {
       results = [];
       return self;
@@ -139,7 +147,8 @@ function ResultsSearch() constructor {
         }
       }
       
-      if ((desiredHorseResult == 2 && array_contains(sortedResults[desiredRaceTypeIndex], 1))
+      if ((includeWin && desiredHorseResult == 1)
+       || (desiredHorseResult == 2 && array_contains(sortedResults[desiredRaceTypeIndex], 1))
        || (desiredHorseResult == 3 && array_contains(sortedResults[desiredRaceTypeIndex], 1) && array_contains(sortedResults[desiredRaceTypeIndex], 2))) {
          array_push(filteredResults, self.results[i]);
       }
@@ -202,10 +211,11 @@ function ResultsSearch() constructor {
         var currResult = self.results[i];
         
         if (array_contains(generations_in, currResult.team_generation)) {
-          array_push(filteredResults, currResult.results);
+          for (var j = 0; j < array_length(currResult.results); j++) {
+            array_push(filteredResults, currResult.results[j]);
+          }
         }
       }
-      
       self.single_results = true; //we won't have { team_generation: 1.0, results: [ResultObjs] } for example, just [ResultObjs]
     } else {
       filteredResults = self.results; 
@@ -214,13 +224,9 @@ function ResultsSearch() constructor {
     var secondPass = [];
     
     for (var i = 0; i < array_length(filteredResults); i++) {
-      var currentResultArray = filteredResults[i];
-      
-      for (var j = 0; j < array_length(currentResultArray); j++) {
-        var currentSingleResult = currentResultArray[j];
-        if (currentSingleResult.horse_uuid == horseObj.uuid) {
-          array_push(secondPass, currentSingleResult); 
-        }
+      var currResult = filteredResults[i];
+      if (currResult.horse_uuid == horseObj.uuid) {
+        array_push(secondPass, currResult); 
       }
     }
     
