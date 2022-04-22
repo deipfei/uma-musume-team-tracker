@@ -487,7 +487,7 @@ var previousGenPicker = new EmuButton((room_width - 500), 32, 125, 32, "Previous
     nextGen = oUmaTeamTracker.data.team.generation;
   } else {
     nextGen = oStatsController.current_team_generation - 1;
-    if (nextGen < 0) nextGen = 0;
+    if (nextGen < 1) nextGen = 1;
   }
   if (nextGen != oStatsController.current_team_generation) {
     viewGenerationStats(nextGen);
@@ -563,12 +563,17 @@ refreshChartButton = new EmuButton(16, room_height - 80, 100, 32, "Refresh", fun
 onlyTeamCheckbox = new EmuCheckbox(132, room_height - 80, 100, 32, "Only Team", false, function() {
   oUmaTeamTracker.horseChart.onlyOnTeamFilter = value;
   oUmaTeamTracker.horseChart.SetData();
-  
+});
+
+potentialWinCheckbox = new EmuCheckbox(264, room_height - 80, 100, 32, "Potential", false, function() {
+  oUmaTeamTracker.horseChart.potentialWinFilter = value;
+  oUmaTeamTracker.horseChart.SetData();
 });
 tab_chart.AddContent([
   horseChart,
   refreshChartButton,
-  onlyTeamCheckbox
+  onlyTeamCheckbox,
+  potentialWinCheckbox
 ]);
 #endregion
 

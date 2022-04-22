@@ -12,6 +12,8 @@ function HorseChart(x, y, w, h, xMin, xMax, xLabel, yMin, yMax, yLabel): EmuCore
   self.resultsSearch = new ResultsSearch();
   
   self.onlyOnTeamFilter = false;
+  self.potentialWinFilter = false;
+  self.absoluteMax = 80;
   
   SetData = function() {
     self.data = ds_list_create();
@@ -26,13 +28,20 @@ function HorseChart(x, y, w, h, xMin, xMax, xLabel, yMin, yMax, yLabel): EmuCore
         continue; 
       }
       
-      var racesRun = resultsSearch.reset().filterByHorseObj(currentHorse).length();
+      var racesRun = resultsSearch.reset().saveBackup().filterByHorseObj(currentHorse).length();
       if (racesRun > yAxisMax) {
         yAxisMax = racesRun; 
       }
       //var wins = resultsSearch.reset().filterByPotentialWin(currentHorse.uuid).length(); //potential
       var wins = resultsSearch.filterByWin().length();
+      
+      if (self.potentialWinFilter) {
+        wins += resultsSearch.restoreBackup().filterByPotentialWin(currentHorse.uuid).length();
+      }
+      
       var winP = (wins / racesRun) * 100;
+      
+      if (winP > self.absoluteMax) continue;
     
       if (winP > xAxisMax) {
         xAxisMax = winP;
