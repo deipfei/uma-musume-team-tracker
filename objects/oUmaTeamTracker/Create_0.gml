@@ -138,7 +138,8 @@ if (array_length(data.all_horses) > 0) {
 
 team_in_memory = loadTeamIntoMemory();
 
-instance_create_depth(0, 0, 0, oNewHorseController);
+oUmaTeamTracker.newHorseController = instance_create_depth(0, 0, 0, oNewHorseController);
+oUmaTeamTracker.editHorseController = instance_create_depth(0, 0, 0, oNewHorseController);
 instance_create_depth(0, 0, 0, oNewResultController);
 instance_create_depth(0, 0, 0, oPreviousResultsController);
 instance_create_depth(0, 0, 0, oUmaTeamEditController);
@@ -188,13 +189,13 @@ for (var i = 0; i < 5; i++) {
         if (oUmaTeamEditController.editing) {
           #region edit mode
           var dialog = new EmuDialog(950, 640, "New Girl");
-          oNewHorseController.race_type = self.race_type;
-          oNewHorseController.horse_position = horse_position;
-          oNewHorseController.existing_horses = new EmuList_ExistingHorses(32, EMU_AUTO, 256, 32, "Existing:", 32, 8, function() {
+          oUmaTeamTracker.newHorseController.race_type = self.race_type;
+          oUmaTeamTracker.newHorseController.horse_position = horse_position;
+          oUmaTeamTracker.newHorseController.existing_horses = new EmuList_ExistingHorses(32, EMU_AUTO, 256, 32, "Existing:", 32, 8, function() {
             var selection = GetSelection();
             
             if (selection != -1) {
-              setNewHorseStats(self._entries[| selection]); 
+              setNewHorseStats(oUmaTeamTracker.newHorseController, self._entries[| selection]); 
             }
           });
         
@@ -203,9 +204,9 @@ for (var i = 0; i < 5; i++) {
             var selection = GetSelection();
             if (selection != -1) {
               var base = getHorseByIndex(selection);
-              oNewHorseController.horse_spr_obj._index = selection;
-              oNewHorseController.horse_in_progress.base = base;
-              addExistingHorses(base);
+              oUmaTeamTracker.newHorseController.horse_spr_obj._index = selection;
+              oUmaTeamTracker.newHorseController.horse_in_progress.base = base;
+              addExistingHorses(oUmaTeamTracker.newHorseController, base);
             }
           });
           for (var i = 0; i < array_length(HORSES); i++) {
@@ -217,156 +218,156 @@ for (var i = 0; i < 5; i++) {
           //short, mile, mid, long
           //turf dirt
           //chaser, betweener, leader, runner
-          oNewHorseController.turfS = new EmuCheckbox(332, 32, 100, 32, "Turf", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.TURF, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.turfS = new EmuCheckbox(332, 32, 100, 32, "Turf", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.TURF, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.dirtS = new EmuCheckbox(472, 32, 100, 32, "Dirt", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.DIRT, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.dirtS = new EmuCheckbox(472, 32, 100, 32, "Dirt", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.DIRT, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.dirtS.SetPrevious(oNewHorseController.turfS);
+          oUmaTeamTracker.newHorseController.dirtS.SetPrevious(oUmaTeamTracker.newHorseController.turfS);
         
-          oNewHorseController.shortS = new EmuCheckbox(332, 80, 100, 32, "Short", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.SHORT, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.shortS = new EmuCheckbox(332, 80, 100, 32, "Short", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.SHORT, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.shortS.SetPrevious(oNewHorseController.dirtS);
-          oNewHorseController.mileS = new EmuCheckbox(472, 80, 100, 32, "Mile", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.MILE, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.shortS.SetPrevious(oUmaTeamTracker.newHorseController.dirtS);
+          oUmaTeamTracker.newHorseController.mileS = new EmuCheckbox(472, 80, 100, 32, "Mile", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.MILE, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.mileS.SetPrevious(oNewHorseController.shortS);
-          oNewHorseController.midS = new EmuCheckbox(332, 128, 100, 32, "Mid", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.MID, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.mileS.SetPrevious(oUmaTeamTracker.newHorseController.shortS);
+          oUmaTeamTracker.newHorseController.midS = new EmuCheckbox(332, 128, 100, 32, "Mid", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.MID, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.midS.SetPrevious(oNewHorseController.mileS);
-          oNewHorseController.longS = new EmuCheckbox(472, 128, 100, 32, "Long", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.LONG, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.midS.SetPrevious(oUmaTeamTracker.newHorseController.mileS);
+          oUmaTeamTracker.newHorseController.longS = new EmuCheckbox(472, 128, 100, 32, "Long", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.LONG, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.longS.SetPrevious(oNewHorseController.midS);
+          oUmaTeamTracker.newHorseController.longS.SetPrevious(oUmaTeamTracker.newHorseController.midS);
         
-          oNewHorseController.runnerS = new EmuCheckbox(332, 176, 100, 32, "Runner", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.RUNNER, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.runnerS = new EmuCheckbox(332, 176, 100, 32, "Runner", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.RUNNER, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.runnerS.SetPrevious(oNewHorseController.longS);
-          oNewHorseController.leaderS = new EmuCheckbox(472, 176, 100, 32, "Leader", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.LEADER, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.runnerS.SetPrevious(oUmaTeamTracker.newHorseController.longS);
+          oUmaTeamTracker.newHorseController.leaderS = new EmuCheckbox(472, 176, 100, 32, "Leader", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.LEADER, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.leaderS.SetPrevious(oNewHorseController.runnerS);
-          oNewHorseController.betweenerS = new EmuCheckbox(332, 224, 100, 32, "Betweener", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.BETWEENER, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.leaderS.SetPrevious(oUmaTeamTracker.newHorseController.runnerS);
+          oUmaTeamTracker.newHorseController.betweenerS = new EmuCheckbox(332, 224, 100, 32, "Betweener", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.BETWEENER, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.betweenerS.SetPrevious(oNewHorseController.leaderS);
-          oNewHorseController.chaserS = new EmuCheckbox(472, 224, 100, 32, "Chaser", false, function() {
-            setCurrentSRank(S_RANK_INDEXES.CHASER, value ? "1" : "0");
-            resetUsingOldHorse();
+          oUmaTeamTracker.newHorseController.betweenerS.SetPrevious(oUmaTeamTracker.newHorseController.leaderS);
+          oUmaTeamTracker.newHorseController.chaserS = new EmuCheckbox(472, 224, 100, 32, "Chaser", false, function() {
+            setCurrentSRank(oUmaTeamTracker.newHorseController, S_RANK_INDEXES.CHASER, value ? "1" : "0");
+            resetUsingOldHorse(oUmaTeamTracker.newHorseController);
           });
-          oNewHorseController.chaserS.SetPrevious(oNewHorseController.betweenerS);
+          oUmaTeamTracker.newHorseController.chaserS.SetPrevious(oUmaTeamTracker.newHorseController.betweenerS);
           #endregion
         
           #region skills
-          oNewHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.STRING, function() {
             if (value != "") {
-              oNewHorseController.horse_in_progress.total = real(value);
-              resetUsingOldHorse();
+              oUmaTeamTracker.newHorseController.horse_in_progress.total = real(value);
+              resetUsingOldHorse(oUmaTeamTracker.newHorseController);
             }
           });
-          oNewHorseController.overall_input.SetRealNumberBounds(0, 100000);
-          oNewHorseController.overall_input.SetPrevious(oNewHorseController.chaserS);
+          oUmaTeamTracker.newHorseController.overall_input.SetRealNumberBounds(0, 100000);
+          oUmaTeamTracker.newHorseController.overall_input.SetPrevious(oUmaTeamTracker.newHorseController.chaserS);
         
-          oNewHorseController.speed_input = new EmuInput(332, EMU_AUTO, 300, 32, "Speed", "", "", 4, E_InputTypes.INT, function() {
+          oUmaTeamTracker.newHorseController.speed_input = new EmuInput(332, EMU_AUTO, 300, 32, "Speed", "", "", 4, E_InputTypes.INT, function() {
             if (value != "") {
-              oNewHorseController.horse_in_progress.spd = real(value);
-              resetUsingOldHorse();
+              oUmaTeamTracker.newHorseController.horse_in_progress.spd = real(value);
+              resetUsingOldHorse(oUmaTeamTracker.newHorseController);
             }
           });
-          oNewHorseController.speed_input.SetRealNumberBounds(0, 1200);
-          oNewHorseController.speed_input.SetPrevious(oNewHorseController.overall_input);
+          oUmaTeamTracker.newHorseController.speed_input.SetRealNumberBounds(0, 1200);
+          oUmaTeamTracker.newHorseController.speed_input.SetPrevious(oUmaTeamTracker.newHorseController.overall_input);
         
-          oNewHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.STRING, function() {
             if (value != "") {
-              oNewHorseController.horse_in_progress.stam = real(value);
-              resetUsingOldHorse();
+              oUmaTeamTracker.newHorseController.horse_in_progress.stam = real(value);
+              resetUsingOldHorse(oUmaTeamTracker.newHorseController);
             }
           });
-          oNewHorseController.stamina_input.SetRealNumberBounds(0, 1200);
-          oNewHorseController.stamina_input.SetPrevious(oNewHorseController.speed_input);
+          oUmaTeamTracker.newHorseController.stamina_input.SetRealNumberBounds(0, 1200);
+          oUmaTeamTracker.newHorseController.stamina_input.SetPrevious(oUmaTeamTracker.newHorseController.speed_input);
         
-          oNewHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.STRING, function() {
              if (value != "") {
-              oNewHorseController.horse_in_progress.pow = real(value);
-              resetUsingOldHorse();
+              oUmaTeamTracker.newHorseController.horse_in_progress.pow = real(value);
+              resetUsingOldHorse(oUmaTeamTracker.newHorseController);
              }
           });
-          oNewHorseController.power_input.SetRealNumberBounds(0, 1200);
-          oNewHorseController.power_input.SetPrevious(oNewHorseController.stamina_input);
+          oUmaTeamTracker.newHorseController.power_input.SetRealNumberBounds(0, 1200);
+          oUmaTeamTracker.newHorseController.power_input.SetPrevious(oUmaTeamTracker.newHorseController.stamina_input);
         
-          oNewHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.STRING, function() {
             if (value != "") {
-              oNewHorseController.horse_in_progress.guts = real(value);
-              resetUsingOldHorse();
+              oUmaTeamTracker.newHorseController.horse_in_progress.guts = real(value);
+              resetUsingOldHorse(oUmaTeamTracker.newHorseController);
             }
           });
-          oNewHorseController.guts_input.SetRealNumberBounds(0, 1200);
-          oNewHorseController.guts_input.SetPrevious(oNewHorseController.power_input);
+          oUmaTeamTracker.newHorseController.guts_input.SetRealNumberBounds(0, 1200);
+          oUmaTeamTracker.newHorseController.guts_input.SetPrevious(oUmaTeamTracker.newHorseController.power_input);
         
-          oNewHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.STRING, function() {
             if (value != "") {
-              oNewHorseController.horse_in_progress.know = real(value);
-              resetUsingOldHorse();
+              oUmaTeamTracker.newHorseController.horse_in_progress.know = real(value);
+              resetUsingOldHorse(oUmaTeamTracker.newHorseController);
             }
           });
-          oNewHorseController.knowledge_input.SetRealNumberBounds(0, 1200);
-          oNewHorseController.knowledge_input.SetPrevious(oNewHorseController.guts_input);
+          oUmaTeamTracker.newHorseController.knowledge_input.SetRealNumberBounds(0, 1200);
+          oUmaTeamTracker.newHorseController.knowledge_input.SetPrevious(oUmaTeamTracker.newHorseController.guts_input);
           #endregion
         
           #region selected girl sprite
           var selectedGirlSprite = new EmuImage(675, 20, 256, 419, umafullbody, 0, c_white, 1, true);
-          selectedGirlSprite.image_obj = oNewHorseController.horse_spr_obj;
-          oNewHorseController.horse_spr_obj._index = 0;
+          selectedGirlSprite.image_obj = oUmaTeamTracker.newHorseController.horse_spr_obj;
+          oUmaTeamTracker.newHorseController.horse_spr_obj._index = 0;
           #endregion
         
           #region submit cancel
           var submitButton = new EmuButton(600, 600, 100, 32, "Submit", function() {
-            setHorse(oNewHorseController.race_type, oNewHorseController.horse_position, oNewHorseController.horse_in_progress);
-            resetHorseInProgress();
+            setHorse(oUmaTeamTracker.newHorseController, oUmaTeamTracker.newHorseController.race_type, oUmaTeamTracker.newHorseController.horse_position, oUmaTeamTracker.newHorseController.horse_in_progress);
+            resetHorseInProgress(oUmaTeamTracker.newHorseController);
             emu_dialog_close_auto();
             save();
           });
-          submitButton.SetPrevious(oNewHorseController.knowledge_input);
-          submitButton.SetNext(oNewHorseController.turfS);
+          submitButton.SetPrevious(oUmaTeamTracker.newHorseController.knowledge_input);
+          submitButton.SetNext(oUmaTeamTracker.newHorseController.turfS);
         
           var cancelButton = new EmuButton(480, 600, 100, 32, "Cancel", function() {
-           resetHorseInProgress();
+           resetHorseInProgress(oUmaTeamTracker.newHorseController);
            emu_dialog_close_auto();
           });
           #endregion
 
         
           dialog.AddContent([list_sprites,
-            oNewHorseController.existing_horses,
-            oNewHorseController.turfS,
-            oNewHorseController.dirtS,
-            oNewHorseController.shortS,
-            oNewHorseController.mileS,
-            oNewHorseController.midS,
-            oNewHorseController.longS,
-            oNewHorseController.runnerS,
-            oNewHorseController.leaderS,
-            oNewHorseController.betweenerS,
-            oNewHorseController.chaserS,
-            oNewHorseController.overall_input,
-            oNewHorseController.speed_input,
-            oNewHorseController.stamina_input,
-            oNewHorseController.power_input,
-            oNewHorseController.guts_input,
-            oNewHorseController.knowledge_input,
+            oUmaTeamTracker.newHorseController.existing_horses,
+            oUmaTeamTracker.newHorseController.turfS,
+            oUmaTeamTracker.newHorseController.dirtS,
+            oUmaTeamTracker.newHorseController.shortS,
+            oUmaTeamTracker.newHorseController.mileS,
+            oUmaTeamTracker.newHorseController.midS,
+            oUmaTeamTracker.newHorseController.longS,
+            oUmaTeamTracker.newHorseController.runnerS,
+            oUmaTeamTracker.newHorseController.leaderS,
+            oUmaTeamTracker.newHorseController.betweenerS,
+            oUmaTeamTracker.newHorseController.chaserS,
+            oUmaTeamTracker.newHorseController.overall_input,
+            oUmaTeamTracker.newHorseController.speed_input,
+            oUmaTeamTracker.newHorseController.stamina_input,
+            oUmaTeamTracker.newHorseController.power_input,
+            oUmaTeamTracker.newHorseController.guts_input,
+            oUmaTeamTracker.newHorseController.knowledge_input,
             selectedGirlSprite,
             cancelButton,
             submitButton
@@ -469,7 +470,7 @@ for (var i = 0; i < 10; i++) {
 
 #region stats
 var genWidth = 600;
-var genPicker = new EmuInput((room_width / 2) - (genWidth / 2), 32, genWidth, 32, "Current Team Generation: " + string(oUmaTeamTracker.data.team.generation), "", "", 100, E_InputTypes.INT, function() {
+var genPicker = new EmuInput((room_width / 2) - (genWidth), 32, genWidth, 32, "Current Team Generation: " + string(oUmaTeamTracker.data.team.generation), "", "", 100, E_InputTypes.INT, function() {
   if (value != "") {
     var newGen = real(value);
     oStatsController.current_team_generation = newGen;
@@ -477,6 +478,36 @@ var genPicker = new EmuInput((room_width / 2) - (genWidth / 2), 32, genWidth, 32
     setStatsTeam();
     setOverallAverages(newGen);
     generateAllStats(newGen);
+  }
+});
+
+var previousGenPicker = new EmuButton((room_width - 500), 32, 125, 32, "Previous", function() {
+  var nextGen = -1;
+  if (oStatsController.current_team_generation == -1) {
+    nextGen = oUmaTeamTracker.data.team.generation;
+  } else {
+    nextGen = oStatsController.current_team_generation - 1;
+    if (nextGen < 0) nextGen = 0;
+  }
+  if (nextGen != oStatsController.current_team_generation) {
+    viewGenerationStats(nextGen);
+  }
+});
+
+var currentGenPicker = new EmuButton((room_width - 350), 32, 125, 32, "Current", function() {
+  viewGenerationStats(oUmaTeamTracker.data.team.generation);
+});
+
+var nextGenPicker = new EmuButton((room_width - 200), 32, 125, 32, "Next", function() {
+  var nextGen = -1;
+  if (oStatsController.current_team_generation == -1) {
+    nextGen = 0;
+  } else {
+    nextGen = oStatsController.current_team_generation + 1;
+    if (nextGen > oUmaTeamTracker.data.team.generation) nextGen = oUmaTeamTracker.data.team.generation;
+  }
+  if (nextGen != oStatsController.current_team_generation) {
+    viewGenerationStats(nextGen);
   }
 });
 
@@ -506,6 +537,9 @@ for (var i = 0; i < 5; i++) {
 
 tab_stats.AddContent([
   genPicker,
+  previousGenPicker,
+  currentGenPicker,
+  nextGenPicker,
   new EmuText(162, 125, 200, 32, "Short"),
   new EmuText(394, 125, 200, 32, "Mile"),
   new EmuText(626, 125, 200, 32, "Mid"),
@@ -520,8 +554,200 @@ tab_stats.AddContent([
 #endregion
 
 #region chart
+horseChart = new HorseChart(30, 30, 1220, 660, 0, 100, "Win %", 0, oStatsController.most_races_run, "Races Run");
 
+refreshChartButton = new EmuButton(16, room_height - 80, 100, 32, "Refresh", function() {
+  oUmaTeamTracker.horseChart.SetData();
+});
+
+onlyTeamCheckbox = new EmuCheckbox(132, room_height - 80, 100, 32, "Only Team", false, function() {
+  oUmaTeamTracker.horseChart.onlyOnTeamFilter = value;
+  oUmaTeamTracker.horseChart.SetData();
+  
+});
 tab_chart.AddContent([
-  new HorseChart(30, 30, 1220, 660, 0, 100, "Win %", 0, oStatsController.most_races_run, "Races Run")
+  horseChart,
+  refreshChartButton,
+  onlyTeamCheckbox
+]);
+#endregion
+
+#region horses
+oUmaTeamTracker.editHorseController.existing_horses = new EmuList_ExistingHorses(32, EMU_AUTO, 256, 32, "Existing:", 32, 8, function() {
+  var selection = GetSelection();
+            
+  if (selection != -1) {
+    setNewHorseStats(oUmaTeamTracker.editHorseController, self._entries[| selection]); 
+  }
+});
+        
+#region list of names
+var list_sprites = new EmuList(32, EMU_AUTO, 256, 32, "Horse:", 32, 8, function() {
+  var selection = GetSelection();
+  if (selection != -1) {
+    var base = getHorseByIndex(selection);
+    oUmaTeamTracker.editHorseController.horse_spr_obj._index = selection;
+    oUmaTeamTracker.editHorseController.horse_in_progress.base = base;
+    addExistingHorses(oUmaTeamTracker.editHorseController, base);
+  }
+});
+for (var i = 0; i < array_length(HORSES); i++) {
+  list_sprites.AddEntries([HORSES[i].name]);
+}
+#endregion
+        
+#region S ranks
+//short, mile, mid, long
+//turf dirt
+//chaser, betweener, leader, runner
+oUmaTeamTracker.editHorseController.turfS = new EmuCheckbox(332, 32, 100, 32, "Turf", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.TURF, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.dirtS = new EmuCheckbox(472, 32, 100, 32, "Dirt", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.DIRT, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.dirtS.SetPrevious(oUmaTeamTracker.editHorseController.turfS);
+        
+oUmaTeamTracker.editHorseController.shortS = new EmuCheckbox(332, 80, 100, 32, "Short", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.SHORT, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.shortS.SetPrevious(oUmaTeamTracker.editHorseController.dirtS);
+oUmaTeamTracker.editHorseController.mileS = new EmuCheckbox(472, 80, 100, 32, "Mile", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.MILE, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.mileS.SetPrevious(oUmaTeamTracker.editHorseController.shortS);
+oUmaTeamTracker.editHorseController.midS = new EmuCheckbox(332, 128, 100, 32, "Mid", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.MID, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.midS.SetPrevious(oUmaTeamTracker.editHorseController.mileS);
+oUmaTeamTracker.editHorseController.longS = new EmuCheckbox(472, 128, 100, 32, "Long", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.LONG, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.longS.SetPrevious(oUmaTeamTracker.editHorseController.midS);
+        
+oUmaTeamTracker.editHorseController.runnerS = new EmuCheckbox(332, 176, 100, 32, "Runner", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.RUNNER, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.runnerS.SetPrevious(oUmaTeamTracker.editHorseController.longS);
+oUmaTeamTracker.editHorseController.leaderS = new EmuCheckbox(472, 176, 100, 32, "Leader", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.LEADER, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.leaderS.SetPrevious(oUmaTeamTracker.editHorseController.runnerS);
+oUmaTeamTracker.editHorseController.betweenerS = new EmuCheckbox(332, 224, 100, 32, "Betweener", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.BETWEENER, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.betweenerS.SetPrevious(oUmaTeamTracker.editHorseController.leaderS);
+oUmaTeamTracker.editHorseController.chaserS = new EmuCheckbox(472, 224, 100, 32, "Chaser", false, function() {
+  setCurrentSRank(oUmaTeamTracker.editHorseController, S_RANK_INDEXES.CHASER, value ? "1" : "0");
+  
+});
+oUmaTeamTracker.editHorseController.chaserS.SetPrevious(oUmaTeamTracker.editHorseController.betweenerS);
+#endregion
+        
+#region skills
+oUmaTeamTracker.editHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.STRING, function() {
+  if (value != "") {
+    oUmaTeamTracker.editHorseController.horse_in_progress.total = real(value);
+    
+  }
+});
+oUmaTeamTracker.editHorseController.overall_input.SetRealNumberBounds(0, 100000);
+oUmaTeamTracker.editHorseController.overall_input.SetPrevious(oUmaTeamTracker.editHorseController.chaserS);
+        
+oUmaTeamTracker.editHorseController.speed_input = new EmuInput(332, EMU_AUTO, 300, 32, "Speed", "", "", 4, E_InputTypes.INT, function() {
+  if (value != "") {
+    oUmaTeamTracker.editHorseController.horse_in_progress.spd = real(value);
+    
+  }
+});
+oUmaTeamTracker.editHorseController.speed_input.SetRealNumberBounds(0, 1200);
+oUmaTeamTracker.editHorseController.speed_input.SetPrevious(oUmaTeamTracker.editHorseController.overall_input);
+        
+oUmaTeamTracker.editHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.STRING, function() {
+  if (value != "") {
+    oUmaTeamTracker.editHorseController.horse_in_progress.stam = real(value);
+    
+  }
+});
+oUmaTeamTracker.editHorseController.stamina_input.SetRealNumberBounds(0, 1200);
+oUmaTeamTracker.editHorseController.stamina_input.SetPrevious(oUmaTeamTracker.editHorseController.speed_input);
+        
+oUmaTeamTracker.editHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.STRING, function() {
+    if (value != "") {
+    oUmaTeamTracker.editHorseController.horse_in_progress.pow = real(value);
+    
+    }
+});
+oUmaTeamTracker.editHorseController.power_input.SetRealNumberBounds(0, 1200);
+oUmaTeamTracker.editHorseController.power_input.SetPrevious(oUmaTeamTracker.editHorseController.stamina_input);
+        
+oUmaTeamTracker.editHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.STRING, function() {
+  if (value != "") {
+    oUmaTeamTracker.editHorseController.horse_in_progress.guts = real(value);
+  }
+});
+oUmaTeamTracker.editHorseController.guts_input.SetRealNumberBounds(0, 1200);
+oUmaTeamTracker.editHorseController.guts_input.SetPrevious(oUmaTeamTracker.editHorseController.power_input);
+        
+oUmaTeamTracker.editHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.STRING, function() {
+  if (value != "") {
+    oUmaTeamTracker.editHorseController.horse_in_progress.know = real(value);
+    
+  }
+});
+oUmaTeamTracker.editHorseController.knowledge_input.SetRealNumberBounds(0, 1200);
+oUmaTeamTracker.editHorseController.knowledge_input.SetPrevious(oUmaTeamTracker.editHorseController.guts_input);
+#endregion
+        
+#region selected girl sprite
+var selectedGirlSpriteEdit = new EmuImage(675, 20, 414, 650, umafullbody, 0, c_white, 1, true);
+selectedGirlSpriteEdit.image_obj = oUmaTeamTracker.editHorseController.horse_spr_obj;
+oUmaTeamTracker.editHorseController.horse_spr_obj._index = 0;
+#endregion
+        
+#region submit cancel
+var submitButtonEdit = new EmuButton(600, 600, 100, 32, "Submit", function() {
+  saveHorseEdit(oUmaTeamTracker.editHorseController);
+  save();
+});
+submitButtonEdit.SetPrevious(oUmaTeamTracker.editHorseController.knowledge_input);
+submitButtonEdit.SetNext(oUmaTeamTracker.editHorseController.turfS);
+        
+var cancelButtonEdit = new EmuButton(480, 600, 100, 32, "Cancel", function() {
+  cancelHorseEdit(oUmaTeamTracker.editHorseController);
+});
+#endregion
+
+        
+tab_horses.AddContent([list_sprites,
+  oUmaTeamTracker.editHorseController.existing_horses,
+  oUmaTeamTracker.editHorseController.turfS,
+  oUmaTeamTracker.editHorseController.dirtS,
+  oUmaTeamTracker.editHorseController.shortS,
+  oUmaTeamTracker.editHorseController.mileS,
+  oUmaTeamTracker.editHorseController.midS,
+  oUmaTeamTracker.editHorseController.longS,
+  oUmaTeamTracker.editHorseController.runnerS,
+  oUmaTeamTracker.editHorseController.leaderS,
+  oUmaTeamTracker.editHorseController.betweenerS,
+  oUmaTeamTracker.editHorseController.chaserS,
+  oUmaTeamTracker.editHorseController.overall_input,
+  oUmaTeamTracker.editHorseController.speed_input,
+  oUmaTeamTracker.editHorseController.stamina_input,
+  oUmaTeamTracker.editHorseController.power_input,
+  oUmaTeamTracker.editHorseController.guts_input,
+  oUmaTeamTracker.editHorseController.knowledge_input,
+  selectedGirlSpriteEdit,
+  submitButtonEdit,
+  cancelButtonEdit
 ]);
 #endregion

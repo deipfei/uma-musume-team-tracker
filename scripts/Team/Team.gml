@@ -14,16 +14,16 @@ function createTeamWithHorses(short1, short2, short3, mile1, mile2, mile3, mid1,
   return new Team([[short1, short2, short3], [mile1, mile2, mile3], [mid1, mid2, mid3], [long1, long2, long3], [dirt1, dirt2, dirt3]], 1); 
 }
 
-function setHorse(type_ind, horse_ind, horse) {
+function setHorse(controller, type_ind, horse_ind, horse) {
   var lastResults = noone;
   var racesRun = array_length(oUmaTeamTracker.data.results);
   if (racesRun > 0) {
     lastResults = oUmaTeamTracker.data.results[racesRun - 1];
   }
   
-  if (oNewHorseController.using_old_horse) {
-    oUmaTeamTracker.team_in_memory[type_ind][horse_ind] = oNewHorseController.horse_reference;
-    oUmaTeamTracker.data.team.horses[type_ind][horse_ind] = oNewHorseController.horse_reference.uuid; 
+  if (controller.using_old_horse) {
+    oUmaTeamTracker.team_in_memory[type_ind][horse_ind] = controller.horse_reference;
+    oUmaTeamTracker.data.team.horses[type_ind][horse_ind] = controller.horse_reference.uuid; 
   } else {
     oUmaTeamTracker.team_in_memory[type_ind][horse_ind] = horse;
     oUmaTeamTracker.data.team.horses[type_ind][horse_ind] = horse.uuid; 
@@ -35,7 +35,7 @@ function setHorse(type_ind, horse_ind, horse) {
     oUmaTeamTracker.data.team.generation += 1; 
   }
   
-  if (!oNewHorseController.using_old_horse) {
+  if (!controller.using_old_horse) {
     array_push(oUmaTeamTracker.data.all_horses, horse);
   }
 }
@@ -66,7 +66,8 @@ function addGenerationToTeam() {
   for (var i = 0; i < 5; i++) {
     for (var j = 0; j < 3; j++) {
       var currentHorse = oUmaTeamTracker.team_in_memory[i][j];
-      if (currentHorse != noone) {
+      var currentHorseGenerations = getHorseGenerations(currentHorse);
+      if (currentHorse != noone && !array_contains(currentHorseGenerations, oUmaTeamTracker.data.team.generation)) {
         array_push(currentHorse.team_generations, new TeamPositions(oUmaTeamTracker.data.team.generation, i, j));
       }
     }

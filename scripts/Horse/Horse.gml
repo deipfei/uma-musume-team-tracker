@@ -70,3 +70,13 @@ function getHorseGenerations(horseObj) {
   
   return generations;
 }
+
+function copyHorseStats(destination, source) {
+  destination.total = source.total;
+  destination.spd = source.spd;
+  destination.stam = source.stam;
+  destination.pow = source.pow;
+  destination.guts = source.guts;
+  destination.know = source.know;
+  destination.s_ranks = source.s_ranks;
+}

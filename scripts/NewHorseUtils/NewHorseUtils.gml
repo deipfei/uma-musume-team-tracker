@@ -1,7 +1,7 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
-function resetHorseInProgress(){
-  oNewHorseController.horse_in_progress = createHorseFromBase(_ADMIRE_VEGA, 0);
+function resetHorseInProgress(controller){
+  controller.horse_in_progress = createHorseFromBase(_ADMIRE_VEGA, 0);
 }
 
 function setSRank(horse, index, value) {
@@ -18,19 +18,19 @@ function setSRank(horse, index, value) {
   save();
 }
 
-function setCurrentSRank(index, value) {
-  setSRank(oNewHorseController.horse_in_progress, index, value);
+function setCurrentSRank(controller, index, value) {
+  setSRank(controller.horse_in_progress, index, value);
 }
 
 function getSRank(horse, index) {
   return (string_char_at(horse.s_ranks, index) == "1") ? true : false;
 }
 
-function getCurrentSRank(index) {
-  return getSRank(oNewHorseController.horse_in_progress, index); 
+function getCurrentSRank(controller, index) {
+  return getSRank(controller.horse_in_progress, index); 
 }
 
-function addExistingHorses(base) {
+function addExistingHorses(controller, base) {
   var horseList = ds_list_create();
   
   for (var i = 0; i < array_length(oUmaTeamTracker.data.all_horses); i++) {
@@ -40,22 +40,22 @@ function addExistingHorses(base) {
     }
   }
   
-  oNewHorseController.existing_horses.SetList(horseList); 
+  controller.existing_horses.SetList(horseList); 
 }
 
-function setNewHorseStats(horse) {
-  with oNewHorseController {
+function setNewHorseStats(controller, horse) {
+  with controller {
     horse_in_progress = json_parse(json_stringify(horse)); //do not overwrite original if you edit stats
-    turfS.value = getCurrentSRank(S_RANK_INDEXES.TURF);
-    dirtS.value = getCurrentSRank(S_RANK_INDEXES.DIRT);
-    shortS.value = getCurrentSRank(S_RANK_INDEXES.SHORT);
-    mileS.value = getCurrentSRank(S_RANK_INDEXES.MILE);
-    midS.value = getCurrentSRank(S_RANK_INDEXES.MID);
-    longS.value = getCurrentSRank(S_RANK_INDEXES.LONG);
-    runnerS.value = getCurrentSRank(S_RANK_INDEXES.RUNNER);
-    leaderS.value = getCurrentSRank(S_RANK_INDEXES.LEADER);
-    betweenerS.value = getCurrentSRank(S_RANK_INDEXES.BETWEENER);
-    chaserS.value = getCurrentSRank(S_RANK_INDEXES.CHASER);
+    turfS.value = getCurrentSRank(controller, S_RANK_INDEXES.TURF);
+    dirtS.value = getCurrentSRank(controller, S_RANK_INDEXES.DIRT);
+    shortS.value = getCurrentSRank(controller, S_RANK_INDEXES.SHORT);
+    mileS.value = getCurrentSRank(controller, S_RANK_INDEXES.MILE);
+    midS.value = getCurrentSRank(controller, S_RANK_INDEXES.MID);
+    longS.value = getCurrentSRank(controller, S_RANK_INDEXES.LONG);
+    runnerS.value = getCurrentSRank(controller, S_RANK_INDEXES.RUNNER);
+    leaderS.value = getCurrentSRank(controller, S_RANK_INDEXES.LEADER);
+    betweenerS.value = getCurrentSRank(controller, S_RANK_INDEXES.BETWEENER);
+    chaserS.value = getCurrentSRank(controller, S_RANK_INDEXES.CHASER);
     
     overall_input.value = real(horse_in_progress.total);
     speed_input.value = real(horse_in_progress.spd);
@@ -69,11 +69,29 @@ function setNewHorseStats(horse) {
   }
 }
 
-function resetUsingOldHorse() {
-  if (oNewHorseController.using_old_horse) {
-    oNewHorseController.using_old_horse = false;
-    oNewHorseController.horse_reference = noone;
-    oNewHorseController.horse_in_progress.uuid = uuid_generate();
-    oNewHorseController.team_generations = [];
+function resetUsingOldHorse(controller) {
+  if (controller.using_old_horse) {
+    controller.using_old_horse = false;
+    controller.horse_reference = noone;
+    controller.horse_in_progress.uuid = uuid_generate();
+    controller.team_generations = [];
+  }
+}
+
+function saveHorseEdit(controller) {
+  with controller {
+    if (horse_reference != noone) {
+      copyHorseStats(horse_reference, horse_in_progress);
+    }
+  }
+  
+  save();
+}
+
+function cancelHorseEdit(controller) {
+  with controller {
+    if (horse_reference != noone) {
+      setNewHorseStats(controller, horse_reference);
+    }
   }
 }

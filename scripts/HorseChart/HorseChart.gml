@@ -11,43 +11,53 @@ function HorseChart(x, y, w, h, xMin, xMax, xLabel, yMin, yMax, yLabel): EmuCore
   self.yAxisMax = yMax;
   self.resultsSearch = new ResultsSearch();
   
-  self.data = ds_list_create();
+  self.onlyOnTeamFilter = false;
   
-  var len = array_length(oUmaTeamTracker.data.all_horses);
-  xAxisMax = 0;
-  yAxisMax = 0;
-  for (var i = 0; i < len; i++) {
-    var currentHorse = oUmaTeamTracker.data.all_horses[i];
+  SetData = function() {
+    self.data = ds_list_create();
+  
+    var len = array_length(oUmaTeamTracker.data.all_horses);
+    xAxisMax = 0;
+    yAxisMax = 0;
+    for (var i = 0; i < len; i++) {
+      var currentHorse = oUmaTeamTracker.data.all_horses[i];
       
-    var racesRun = resultsSearch.reset().filterByHorseObj(currentHorse).length();
-    if (racesRun > yAxisMax) {
-      yAxisMax = racesRun; 
-    }
-    //var wins = resultsSearch.reset().filterByPotentialWin(currentHorse.uuid).length(); //potential
-    var wins = resultsSearch.filterByWin().length();
-    var winP = (wins / racesRun) * 100;
-    
-    if (winP > xAxisMax) {
-      xAxisMax = winP;
-    }
+      if (self.onlyOnTeamFilter && !teamIncludesHorse(oUmaTeamTracker.data.team, currentHorse)) {
+        continue; 
+      }
       
-    var xData = (winP - xAxisMin);
-    var yData = (racesRun - yAxisMin);
+      var racesRun = resultsSearch.reset().filterByHorseObj(currentHorse).length();
+      if (racesRun > yAxisMax) {
+        yAxisMax = racesRun; 
+      }
+      //var wins = resultsSearch.reset().filterByPotentialWin(currentHorse.uuid).length(); //potential
+      var wins = resultsSearch.filterByWin().length();
+      var winP = (wins / racesRun) * 100;
     
-    var dataPoint = {
-      _x: xData,
-      _y: yData,
-      tooltip: currentHorse.base.name + " - " + string(currentHorse.total),
-      in_team: teamIncludesHorse(oUmaTeamTracker.data.team, currentHorse)
-    };
+      if (winP > xAxisMax) {
+        xAxisMax = winP;
+      }
+      
+      var xData = (winP - xAxisMin);
+      var yData = (racesRun - yAxisMin);
     
-    ds_list_add(data, dataPoint);
+      var dataPoint = {
+        _x: xData,
+        _y: yData,
+        tooltip: currentHorse.base.name + " - " + string(currentHorse.total),
+        in_team: teamIncludesHorse(oUmaTeamTracker.data.team, currentHorse)
+      };
+    
+      ds_list_add(data, dataPoint);
+    }
+  
+    xAxisMax += 5;
+    yAxisMax += 5;
+  
+    self.dataLength = ds_list_size(data); 
   }
   
-  xAxisMax += 5;
-  yAxisMax += 5;
-  
-  self.dataLength = ds_list_size(data);
+  SetData();
 
   Render = function(base_x, base_y) {
     processAdvancement();

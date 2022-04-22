@@ -70,6 +70,14 @@ function calculateOverallAverage(type, team_generation) {
   return totalPlacement / numRaces;
 }
 
+function viewGenerationStats(gen) {
+  oStatsController.current_team_generation = gen;
+  oStatsController.current_team_viewing = json_parse(json_stringify(loadTeamByGeneration(gen))); //get new instance so I can add stats without affecting anything
+  setStatsTeam();
+  setOverallAverages(gen);
+  generateAllStats(gen); 
+}
+
 function setStatsTeam() {
   for (var i = 0; i < 5; i++) {
     for (var j = 0; j < 3; j++) {
