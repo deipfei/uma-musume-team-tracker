@@ -272,7 +272,7 @@ for (var i = 0; i < 5; i++) {
           #endregion
         
           #region skills
-          oUmaTeamTracker.newHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.INT, function() {
             if (value != "") {
               oUmaTeamTracker.newHorseController.horse_in_progress.total = real(value);
               resetUsingOldHorse(oUmaTeamTracker.newHorseController);
@@ -290,7 +290,7 @@ for (var i = 0; i < 5; i++) {
           oUmaTeamTracker.newHorseController.speed_input.SetRealNumberBounds(0, 1200);
           oUmaTeamTracker.newHorseController.speed_input.SetPrevious(oUmaTeamTracker.newHorseController.overall_input);
         
-          oUmaTeamTracker.newHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.INT, function() {
             if (value != "") {
               oUmaTeamTracker.newHorseController.horse_in_progress.stam = real(value);
               resetUsingOldHorse(oUmaTeamTracker.newHorseController);
@@ -299,7 +299,7 @@ for (var i = 0; i < 5; i++) {
           oUmaTeamTracker.newHorseController.stamina_input.SetRealNumberBounds(0, 1200);
           oUmaTeamTracker.newHorseController.stamina_input.SetPrevious(oUmaTeamTracker.newHorseController.speed_input);
         
-          oUmaTeamTracker.newHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.INT, function() {
              if (value != "") {
               oUmaTeamTracker.newHorseController.horse_in_progress.pow = real(value);
               resetUsingOldHorse(oUmaTeamTracker.newHorseController);
@@ -308,7 +308,7 @@ for (var i = 0; i < 5; i++) {
           oUmaTeamTracker.newHorseController.power_input.SetRealNumberBounds(0, 1200);
           oUmaTeamTracker.newHorseController.power_input.SetPrevious(oUmaTeamTracker.newHorseController.stamina_input);
         
-          oUmaTeamTracker.newHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.INT, function() {
             if (value != "") {
               oUmaTeamTracker.newHorseController.horse_in_progress.guts = real(value);
               resetUsingOldHorse(oUmaTeamTracker.newHorseController);
@@ -317,7 +317,7 @@ for (var i = 0; i < 5; i++) {
           oUmaTeamTracker.newHorseController.guts_input.SetRealNumberBounds(0, 1200);
           oUmaTeamTracker.newHorseController.guts_input.SetPrevious(oUmaTeamTracker.newHorseController.power_input);
         
-          oUmaTeamTracker.newHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.STRING, function() {
+          oUmaTeamTracker.newHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.INT, function() {
             if (value != "") {
               oUmaTeamTracker.newHorseController.horse_in_progress.know = real(value);
               resetUsingOldHorse(oUmaTeamTracker.newHorseController);
@@ -403,7 +403,7 @@ var newResultsButton = new EmuButton((room_width / 2) - 200, 32, 400, 64, "New R
       if (horse != noone) {
         name = horse.base.name;
       }
-      var resultsInput = new EmuInput_Result(16, 32 + (36 * ((3 * i) + j)), 368, 30, name, "", "", 2, E_InputTypes.STRING, i, j, function() {
+      var resultsInput = new EmuInput_Result(16, 32 + (36 * ((3 * i) + j)), 368, 30, name, "", "", 2, E_InputTypes.INT, i, j, function() {
         if (value != "")
           oNewResultController.results_in_progress[race_type][horse_position] = real(value);
       });
@@ -438,7 +438,7 @@ var newResultsButton = new EmuButton((room_width / 2) - 200, 32, 400, 64, "New R
       dialog.AddContent([cancelButton, submitButton]);
   }
 });
-var classInput = new EmuInput(900, 48, 150, 32, "Class", string(oNewResultController.class), "", 1, E_InputTypes.STRING, function() {
+var classInput = new EmuInput(900, 48, 150, 32, "Class", string(oNewResultController.class), "", 1, E_InputTypes.INT, function() {
   try {
     var newClass = real(value);
     oNewResultController.class = newClass;
@@ -659,7 +659,7 @@ oUmaTeamTracker.editHorseController.chaserS.SetPrevious(oUmaTeamTracker.editHors
 #endregion
         
 #region skills
-oUmaTeamTracker.editHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.STRING, function() {
+oUmaTeamTracker.editHorseController.overall_input = new EmuInput(332, EMU_AUTO, 300, 32, "Overall", "", "", 5, E_InputTypes.INT, function() {
   if (value != "") {
     oUmaTeamTracker.editHorseController.horse_in_progress.total = real(value);
     
@@ -677,7 +677,7 @@ oUmaTeamTracker.editHorseController.speed_input = new EmuInput(332, EMU_AUTO, 30
 oUmaTeamTracker.editHorseController.speed_input.SetRealNumberBounds(0, 1200);
 oUmaTeamTracker.editHorseController.speed_input.SetPrevious(oUmaTeamTracker.editHorseController.overall_input);
         
-oUmaTeamTracker.editHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.STRING, function() {
+oUmaTeamTracker.editHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 300, 32, "Stamina", "", "", 4, E_InputTypes.INT, function() {
   if (value != "") {
     oUmaTeamTracker.editHorseController.horse_in_progress.stam = real(value);
     
@@ -686,7 +686,7 @@ oUmaTeamTracker.editHorseController.stamina_input = new EmuInput(332, EMU_AUTO, 
 oUmaTeamTracker.editHorseController.stamina_input.SetRealNumberBounds(0, 1200);
 oUmaTeamTracker.editHorseController.stamina_input.SetPrevious(oUmaTeamTracker.editHorseController.speed_input);
         
-oUmaTeamTracker.editHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.STRING, function() {
+oUmaTeamTracker.editHorseController.power_input = new EmuInput(332, EMU_AUTO, 300, 32, "Power", "", "", 4, E_InputTypes.INT, function() {
     if (value != "") {
     oUmaTeamTracker.editHorseController.horse_in_progress.pow = real(value);
     
@@ -695,7 +695,7 @@ oUmaTeamTracker.editHorseController.power_input = new EmuInput(332, EMU_AUTO, 30
 oUmaTeamTracker.editHorseController.power_input.SetRealNumberBounds(0, 1200);
 oUmaTeamTracker.editHorseController.power_input.SetPrevious(oUmaTeamTracker.editHorseController.stamina_input);
         
-oUmaTeamTracker.editHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.STRING, function() {
+oUmaTeamTracker.editHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300, 32, "Guts", "", "", 4, E_InputTypes.INT, function() {
   if (value != "") {
     oUmaTeamTracker.editHorseController.horse_in_progress.guts = real(value);
   }
@@ -703,7 +703,7 @@ oUmaTeamTracker.editHorseController.guts_input = new EmuInput(332, EMU_AUTO, 300
 oUmaTeamTracker.editHorseController.guts_input.SetRealNumberBounds(0, 1200);
 oUmaTeamTracker.editHorseController.guts_input.SetPrevious(oUmaTeamTracker.editHorseController.power_input);
         
-oUmaTeamTracker.editHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.STRING, function() {
+oUmaTeamTracker.editHorseController.knowledge_input = new EmuInput(332, EMU_AUTO, 300, 32, "Intelligence", "", "", 4, E_InputTypes.INT, function() {
   if (value != "") {
     oUmaTeamTracker.editHorseController.horse_in_progress.know = real(value);
     

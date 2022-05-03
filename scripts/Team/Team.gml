@@ -63,12 +63,30 @@ function createTeamRandom() {
 }
 
 function addGenerationToTeam() {
+  clearRemovedHorses();
   for (var i = 0; i < 5; i++) {
     for (var j = 0; j < 3; j++) {
       var currentHorse = oUmaTeamTracker.team_in_memory[i][j];
       var currentHorseGenerations = getHorseGenerations(currentHorse);
       if (currentHorse != noone && !array_contains(currentHorseGenerations, oUmaTeamTracker.data.team.generation)) {
         array_push(currentHorse.team_generations, new TeamPositions(oUmaTeamTracker.data.team.generation, i, j));
+      }
+    }
+  }
+}
+
+function clearRemovedHorses() {
+  var horse_size = array_length(oUmaTeamTracker.data.all_horses);
+  for (var i = 0; i < horse_size; i++) {
+    var currHorse = oUmaTeamTracker.data.all_horses[i];
+    var genSize = array_length(currHorse.team_generations);
+    
+    for (var j = 0; j < genSize; j++) {
+      var currGen = currHorse.team_generations[j];
+      
+      if (currGen.generation == oUmaTeamTracker.data.team.generation && !teamIncludesHorse(oUmaTeamTracker.data.team, currHorse)) {
+        //horse was originally in the generation, but never ran a race, should be removed
+        array_delete(currHorse.team_generations, j, 1);
       }
     }
   }

@@ -200,7 +200,7 @@ function ResultsSearch() constructor {
     
     if (!self.single_results) {
       var generations_in = [];
-    
+      
       for (var i = 0; i < array_length(horseObj.team_generations); i++) {
         var currentGen = horseObj.team_generations[i];
       
