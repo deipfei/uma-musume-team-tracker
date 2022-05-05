@@ -6,16 +6,16 @@ function EmuInput_Result(x, y, w, h, text, value, help_text, character_limit, in
   
   processAdvancement = function() {
       if (!self.isActiveElement()) return false;
-      if ((!self._override_tab && keyboard_check_pressed(vk_tab)) || keyboard_check_pressed(vk_enter)) {
-          if (keyboard_check(vk_shift) && self._previous) {
-              self._previous.Activate();
+      if ((!self.override_tab && keyboard_check_pressed(vk_tab)) || keyboard_check_pressed(vk_enter)) {
+          if (keyboard_check(vk_shift) && self.previous) {
+              self.previous.Activate();
               keyboard_clear(vk_tab);
               keyboard_clear(vk_enter);
               keyboard_string = "";
               return true;
           }
-          if (self._next) {
-              self._next.Activate();
+          if (self.next) {
+              self.next.Activate();
               keyboard_clear(vk_tab);
               keyboard_clear(vk_enter);
               keyboard_string = "";

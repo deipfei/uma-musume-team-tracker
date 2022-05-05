@@ -1,6 +1,6 @@
 // Emu (c) 2020 @dragonitespam
 // See the Github wiki for documentation: https://github.com/DragoniteSpam/Documentation/wiki/Emu
-function EmuImage(x, y, w, h, sprite, index, blend, alpha, scale_to_fit): EmuCallback(x, y, w, h, 0, function() {}) constructor {
+function EmuImage(x, y, w, h, sprite, index, blend, alpha, scale_to_fit): EmuCallback(x, y, w, h, "", 0, function() {}) constructor {
     self.sprite = sprite;
     self.blend = blend;
     self.alpha = alpha;
@@ -52,7 +52,7 @@ function EmuImage(x, y, w, h, sprite, index, blend, alpha, scale_to_fit): EmuCal
             ShowTooltip();
         }
         
-        draw_surface_ext(_surface, x1, y1, 1, 1, 0, color_back, 1);
+        draw_surface_ext(_surface, x1, y1, 1, 1, 0, c_white, 1);
     }
     
     Destroy = function() {

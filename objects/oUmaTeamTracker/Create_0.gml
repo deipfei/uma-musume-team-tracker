@@ -195,7 +195,7 @@ for (var i = 0; i < 5; i++) {
             var selection = GetSelection();
             
             if (selection != -1) {
-              setNewHorseStats(oUmaTeamTracker.newHorseController, self._entries[| selection]); 
+              setNewHorseStats(oUmaTeamTracker.newHorseController, self.entries[selection]); 
             }
           });
         
@@ -582,7 +582,7 @@ oUmaTeamTracker.editHorseController.existing_horses = new EmuList_ExistingHorses
   var selection = GetSelection();
             
   if (selection != -1) {
-    setNewHorseStats(oUmaTeamTracker.editHorseController, self._entries[| selection]); 
+    setNewHorseStats(oUmaTeamTracker.editHorseController, self.entries[selection]); 
   }
 });
         

@@ -31,12 +31,12 @@ function getCurrentSRank(controller, index) {
 }
 
 function addExistingHorses(controller, base) {
-  var horseList = ds_list_create();
+  var horseList = [];
   
   for (var i = 0; i < array_length(oUmaTeamTracker.data.all_horses); i++) {
     var currHorse = oUmaTeamTracker.data.all_horses[i];
     if (currHorse.base.name == base.name) {
-      ds_list_add(horseList, currHorse);
+      array_push(horseList, currHorse);
     }
   }
   
